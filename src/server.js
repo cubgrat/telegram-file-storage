@@ -34,7 +34,7 @@ app.get("/download", async (req, res) => {
       });
   
       // Установка имени файла и отправка файла клиенту
-      res.setHeader("Content-Disposition", `attachment; filename="${name || 'file'}"`);
+      res.setHeader("Content-Disposition", `attachment; filename="${'file'}"`);
       response.data.pipe(res); // Передача файла клиенту
     } catch (error) {
       console.error("Ошибка загрузки файла через прокси:", error.message);
