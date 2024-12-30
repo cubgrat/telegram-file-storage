@@ -19,9 +19,7 @@ import { ThemeProvider } from "@mui/material/styles";
 import { lightTheme, darkTheme } from "./theme";
 import Brightness4Icon from "@mui/icons-material/Brightness4";
 import Brightness7Icon from "@mui/icons-material/Brightness7";
-import CloudDownloadIcon from "@mui/icons-material/CloudDownload";
 import FileTile from "./FileTile";
-import FileDownloadIcon from "@mui/icons-material/FileDownload"; // Используем другую иконку для ясности
 
 function App() {
   const [themeMode, setThemeMode] = useState("light");
@@ -38,11 +36,11 @@ function App() {
       const proxyUrl = `http://localhost:5000/download?url=${encodeURIComponent(fileUrl)}&name=${fileName}`;
       const response = await fetch(proxyUrl);
       if (!response.ok) throw new Error("Ошибка загрузки файла");
-  
+
       const blob = await response.blob();
       const link = document.createElement("a");
       link.href = URL.createObjectURL(blob);
-      link.download = fileName; // Имя файла
+      link.download = fileName;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -95,7 +93,7 @@ function App() {
 
   const handleSendFile = async () => {
     if (!file) {
-      setSnackbar({ open: true, severity: 'warning', message: 'Выберите файл перед загрузкой.' });
+      setSnackbar({ open: true, severity: "warning", message: "Выберите файл перед загрузкой." });
       return;
     }
     setIsLoading(true);
@@ -106,9 +104,9 @@ function App() {
         setUploadProgress(progress);
       });
 
-      await fetch('http://localhost:5000/api/files', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      await fetch("http://localhost:5000/api/files", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           chat_id: chatId,
           file_name: file.name,
@@ -116,11 +114,11 @@ function App() {
         }),
       });
 
-      setSnackbar({ open: true, severity: 'success', message: 'Файл успешно загружен!' });
+      setSnackbar({ open: true, severity: "success", message: "Файл успешно загружен!" });
       fetchUploadedFiles();
     } catch (error) {
-      console.error('Ошибка загрузки файла:', error);
-      setSnackbar({ open: true, severity: 'error', message: 'Ошибка загрузки файла.' });
+      console.error("Ошибка загрузки файла:", error);
+      setSnackbar({ open: true, severity: "error", message: "Ошибка загрузки файла." });
     } finally {
       setIsLoading(false);
       setUploadProgress(0);
@@ -134,7 +132,9 @@ function App() {
         <Box display="flex" sx={{ height: "80vh" }}>
           {/* Левая сторона */}
           <Box sx={{ flex: 1, pr: 2 }}>
-            <Typography variant="h4" sx={{ mb: 3 }}>Telegram File Storage</Typography>
+            <Typography variant="h4" sx={{ mb: 3 }}>
+              Telegram File Storage
+            </Typography>
             <Box sx={{ mb: 3 }}>
               <TextField
                 fullWidth
@@ -153,11 +153,7 @@ function App() {
                 sx={{ mb: 2 }}
               />
               <Stack direction="row" spacing={2} justifyContent="center">
-                <Button
-                  variant="contained"
-                  onClick={handleSendMessage}
-                  disabled={isLoading}
-                >
+                <Button variant="contained" onClick={handleSendMessage} disabled={isLoading}>
                   {isLoading ? <CircularProgress size={24} /> : "Отправить сообщение"}
                 </Button>
               </Stack>
@@ -173,12 +169,7 @@ function App() {
                 disabled={isLoading}
               />
               <Stack direction="row" spacing={2} justifyContent="center">
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={handleSendFile}
-                  disabled={isLoading}
-                >
+                <Button variant="contained" color="primary" onClick={handleSendFile} disabled={isLoading}>
                   {isLoading ? <CircularProgress size={24} /> : "Отправить файл"}
                 </Button>
               </Stack>
@@ -197,9 +188,14 @@ function App() {
           <Box sx={{ flex: 6, pl: 2, borderLeft: 1, borderColor: "divider" }}>
             <Box display="flex" justifyContent="space-between" alignItems="center" sx={{ mb: 2 }}>
               <Typography variant="h6">Загруженные файлы</Typography>
-              <Button variant="outlined" onClick={fetchUploadedFiles}>
-                Обновить
-              </Button>
+              <Stack direction="row" spacing={2}>
+                <IconButton onClick={handleThemeToggle}>
+                  {themeMode === "light" ? <Brightness4Icon /> : <Brightness7Icon />}
+                </IconButton>
+                <Button variant="outlined" onClick={fetchUploadedFiles}>
+                  Обновить
+                </Button>
+              </Stack>
             </Box>
             <Grid container spacing={2}>
               {uploadedFiles.map((file, index) => (
@@ -216,11 +212,7 @@ function App() {
           onClose={handleCloseSnackbar}
           anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
         >
-          <Alert
-            onClose={handleCloseSnackbar}
-            severity={snackbar.severity}
-            sx={{ width: "100%" }}
-          >
+          <Alert onClose={handleCloseSnackbar} severity={snackbar.severity} sx={{ width: "100%" }}>
             {snackbar.message}
           </Alert>
         </Snackbar>
