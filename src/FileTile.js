@@ -1,9 +1,11 @@
 import React from "react";
 import { Box, Typography, IconButton } from "@mui/material";
 import CloudDownloadIcon from "@mui/icons-material/CloudDownload";
+import { useTheme } from "@mui/material/styles";
 
 const FileTile = ({ file, onDownload }) => {
   const isFileAvailable = Boolean(file.url);
+  const theme = useTheme(); // Подключение текущей темы
 
   return (
     <Box
@@ -19,6 +21,8 @@ const FileTile = ({ file, onDownload }) => {
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
+        backgroundColor: theme.palette.mode === "light" ? "#f5f5f5" : "#424242", // Цвет фона
+        boxShadow: 1, // Добавление небольшой тени
       }}
     >
       <Typography
@@ -28,8 +32,9 @@ const FileTile = ({ file, onDownload }) => {
           overflow: "hidden",
           whiteSpace: "nowrap",
           width: "100%",
+          color: theme.palette.text.primary, // Цвет текста
         }}
-        >
+      >
         {file.name || "Без имени"}
       </Typography>
       <IconButton
